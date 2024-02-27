@@ -62,28 +62,28 @@ VALUES (70001, 150.5, '2012-10-05', 3005, 5002),
        (70011, 75.29, '2012-08-17', 3003, 5007),
        (70013, 3045.6, '2012-04-25', 3002, 5001);
 
--- 1
+-- Q1
 SELECT c.cust_name AS CustomerName, s.name AS SalesmanName, s.city, c.city
 FROM CUSTOMER c
          JOIN SALESMAN s ON c.city = s.city;
 
--- 2
+-- Q2
 SELECT c.cust_name AS CustomerName, s.name AS SalesmanName
 FROM CUSTOMER c
          INNER JOIN SALESMAN s ON c.salesman_id = s.salesman_id;
 
--- 3
+-- Q3
 SELECT c.cust_name AS CustomerName, c.city AS CustomerCity, s.name AS SalesmanName, s.city AS SalesmanCity
 FROM CUSTOMER c
          INNER JOIN SALESMAN s ON c.salesman_id = s.salesman_id
 WHERE s.city <> c.city;
 
--- 4
+-- Q4
 SELECT o.ord_no AS OrderNumber, c.cust_name AS CustomerName
 FROM ORDERS o
          INNER JOIN CUSTOMER c ON o.customer_id = c.customer_id;
 
--- 5
+-- Q5
 SELECT DISTINCT c.cust_name AS CustomerName, c.grade AS CustomerGrade
 FROM CUSTOMER c
          JOIN ORDERS o ON c.customer_id = o.customer_id
@@ -92,14 +92,14 @@ WHERE c.grade IS NOT NULL
   AND s.city IS NOT NULL
 ORDER BY c.cust_name;
 
--- 6
+-- Q6
 SELECT c.cust_name AS CustomerName, c.city AS CustomerCity, s.name AS SalesmanName, s.commission as SalesmanCommission
 FROM CUSTOMER c
          JOIN SALESMAN s ON c.salesman_id = s.salesman_id
 WHERE s.commission >= 0.12
   AND s.commission <= 0.14;
 
--- 7
+-- Q7
 SELECT DISTINCT o.ord_no                   AS OrderNum,
                 c.cust_name                AS CustomerName,
                 s.commission               as SalesmanCommission,
@@ -111,27 +111,27 @@ WHERE c.grade > 200
   AND c.salesman_id IS NOT NULL
 ORDER BY c.cust_name;
 
--- 8
+-- Q8
 SELECT *
 FROM CUSTOMER
 WHERE grade > 100;
 
--- 9
+-- Q9
 SELECT *
 FROM CUSTOMER
 WHERE grade > 100 AND city = 'New York';
 
--- 10
+-- Q10
 SELECT *
 FROM CUSTOMER
 WHERE grade < 100 OR city = 'New York';
 
--- 11
+-- Q11
 SELECT *
 FROM CUSTOMER
 WHERE grade > 100 <> city = 'New York';
 
--- 12
+-- Q12
 SELECT o.ord_no, o.purch_amt, o.ord_date, o.salesman_id
 FROM ORDERS o
          JOIN SALESMAN s ON o.salesman_id = s.salesman_id
