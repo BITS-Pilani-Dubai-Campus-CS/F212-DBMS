@@ -1,4 +1,4 @@
-use 20220xxxdb
+use 202200276db
 CREATE TABLE SALESMAN
 (
     salesman_id INT PRIMARY KEY,
