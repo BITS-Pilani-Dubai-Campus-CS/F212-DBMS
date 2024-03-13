@@ -1,4 +1,4 @@
-use 20220xxxdb
+use 20220276db
 -- Q1
 -- 1
 CREATE TABLE Admission
