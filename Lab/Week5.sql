@@ -1,71 +1,51 @@
-use 20220276DB;
+use 20220276db;
 
-SELECT s.name AS "SALESMAN", c.cust_name AS "CUSTOMER"
-FROM SALESMAN s
-JOIN CUSTOMER c ON s.salesman_id = c.salesman_id;
-
-SELECT c.cust_name, s.name, s.commission
-FROM CUSTOMER c
-JOIN SALESMAN s ON c.salesman_id = s.salesman_id
-WHERE s.commission > 0.12;
-
-SELECT c.cust_name, s.name, c.city, s.city, s.commission
-FROM CUSTOMER c
-JOIN SALESMAN s ON c.salesman_id = s.salesman_id
-WHERE c.city <> s.city AND s.commission > 0.12;
-
-SELECT s.name, c.cust_name, o.ord_no, o.ord_date, o.purch_amt
-FROM SALESMAN s
-JOIN CUSTOMER c ON s.salesman_id = c.salesman_id
-JOIN ORDERS o ON c.customer_id = o.customer_id;
-
-SELECT cust_name
-FROM CUSTOMER
-WHERE salesman_id IS NOT NULL
-UNION
-SELECT cust_name
-FROM CUSTOMER
-WHERE salesman_id IS NULL
-ORDER BY cust_name;
-
-SELECT s.name, c.cust_name
-FROM SALESMAN s
-CROSS JOIN CUSTOMER c;
-
-CREATE VIEW SALESPERSON_VIEW AS
-SELECT salesman_id, name, city
-FROM SALESMAN;
-
-CREATE VIEW NY_SALESPEOPLE AS
-SELECT salesman_id, name, city, commission
+--1
+SELECT *
 FROM SALESMAN
-WHERE city = 'New York';
+WHERE City IN (SELECT DISTINCT City FROM CUSTOMER);
 
-CREATE VIEW CUST_GRADE_COUNT AS
-SELECT grade, COUNT(*) AS number
-FROM CUSTOMER
-GROUP BY grade;
-
-CREATE VIEW CUST_ORDER_SUMMARY AS
-SELECT ord_date, COUNT(DISTINCT customer_id) AS count,
-      AVG(purch_amt) AS avg, SUM(purch_amt) AS `sum`
+--2
+SELECT *
 FROM ORDERS
-GROUP BY ord_date
-ORDER BY ord_date;
+WHERE purch_amt > ANY (SELECT purch_amt FROM ORDERS WHERE ord_date = '2012-09-10');
 
-SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
-FROM COURSE c
-LEFT OUTER JOIN PREREQ p ON c.course_id = p.course_id;
+--3
+SELECT *
+FROM ORDERS
+WHERE purch_amt < ANY (SELECT purch_amt FROM ORDERS WHERE customer_id IN (SELECT customer_id FROM CUSTOMER WHERE city = 'London'));
 
-SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
-FROM COURSE c
-RIGHT OUTER JOIN PREREQ p ON c.course_id = p.course_id;
+--4
+SELECT *
+FROM CUSTOMER
+WHERE grade > ALL (SELECT grade FROM CUSTOMER WHERE city = 'New York');
 
-SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
-FROM COURSE c
-LEFT JOIN PREREQ p ON c.course_id = p.course_id
-UNION
-SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
-FROM COURSE c
-RIGHT JOIN PREREQ p ON c.course_id = p.course_id
-WHERE c.course_id IS NULL;
+--5
+SELECT *
+FROM CUSTOMER
+WHERE grade <> ALL (SELECT grade FROM CUSTOMER WHERE city = 'London');
+
+--6
+SELECT *
+FROM ORDERS
+WHERE salesman_id = (SELECT salesman_id FROM SALESMAN WHERE name = 'Paul Adam');
+
+--7
+SELECT *
+FROM ORDERS
+WHERE salesman_id IN (SELECT salesman_id FROM SALESMAN WHERE city = 'London');
+
+--8
+SELECT *
+FROM ORDERS
+WHERE purch_amt > (SELECT AVG(purch_amt) FROM ORDERS WHERE ord_date = '2012-10-10');
+
+--9
+SELECT commission
+FROM SALESMAN
+WHERE salesman_id IN (SELECT DISTINCT salesman_id FROM CUSTOMER WHERE city = 'Paris');
+
+--10
+SELECT *
+FROM CUSTOMER
+WHERE customer_id IN (SELECT DISTINCT customer_id FROM ORDERS WHERE ord_date = '2012-10-05');
