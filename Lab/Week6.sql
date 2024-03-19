@@ -1,84 +1,71 @@
-use 20220276db
+use 20220276DB;
 
---1
-SELECT s.name AS "Salesman", c.cust_name AS "Customer"
-FROM salesman s
-JOIN customer c ON s.salesman_id = c.salesman_id;
+SELECT s.name AS "SALESMAN", c.cust_name AS "CUSTOMER"
+FROM SALESMAN s
+JOIN CUSTOMER c ON s.salesman_id = c.salesman_id;
 
---2
-SELECT c.cust_name, s.name, s.commission 
-FROM customer c
-JOIN salesman s ON c.salesman_id = s.salesman_id
+SELECT c.cust_name, s.name, s.commission
+FROM CUSTOMER c
+JOIN SALESMAN s ON c.salesman_id = s.salesman_id
 WHERE s.commission > 0.12;
 
---3
 SELECT c.cust_name, s.name, c.city, s.city, s.commission
-FROM customer c 
-JOIN salesman s ON c.salesman_id = s.salesman_id
+FROM CUSTOMER c
+JOIN SALESMAN s ON c.salesman_id = s.salesman_id
 WHERE c.city <> s.city AND s.commission > 0.12;
 
---4
 SELECT s.name, c.cust_name, o.ord_no, o.ord_date, o.purch_amt
-FROM salesman s
-JOIN customer c ON s.salesman_id = c.salesman_id  
-JOIN orders o ON c.customer_id = o.customer_id;
+FROM SALESMAN s
+JOIN CUSTOMER c ON s.salesman_id = c.salesman_id
+JOIN ORDERS o ON c.customer_id = o.customer_id;
 
---5
-SELECT cust_name 
-FROM customer
+SELECT cust_name
+FROM CUSTOMER
 WHERE salesman_id IS NOT NULL
 UNION
 SELECT cust_name
-FROM customer 
+FROM CUSTOMER
 WHERE salesman_id IS NULL
 ORDER BY cust_name;
 
---6
 SELECT s.name, c.cust_name
-FROM salesman s
-CROSS JOIN customer c;
+FROM SALESMAN s
+CROSS JOIN CUSTOMER c;
 
---7
-CREATE VIEW salesperson_view AS
-SELECT salesman_id, name, city 
-FROM salesman;
+CREATE VIEW SALESPERSON_VIEW AS
+SELECT salesman_id, name, city
+FROM SALESMAN;
 
---8
-CREATE VIEW ny_salespeople AS
+CREATE VIEW NY_SALESPEOPLE AS
 SELECT salesman_id, name, city, commission
-FROM salesman
+FROM SALESMAN
 WHERE city = 'New York';
 
---9
-CREATE VIEW cust_grade_count AS
+CREATE VIEW CUST_GRADE_COUNT AS
 SELECT grade, COUNT(*) AS number
-FROM customer
+FROM CUSTOMER
 GROUP BY grade;
 
---10
-CREATE VIEW cust_order_summary AS
-SELECT ord_date, COUNT(DISTINCT customer_id) AS count, 
-       AVG(purch_amt) AS avg, SUM(purch_amt) AS `sum`  
-FROM orders
+CREATE VIEW CUST_ORDER_SUMMARY AS
+SELECT ord_date, COUNT(DISTINCT customer_id) AS count,
+      AVG(purch_amt) AS avg, SUM(purch_amt) AS `sum`
+FROM ORDERS
 GROUP BY ord_date
 ORDER BY ord_date;
 
---11
 SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
-FROM course c
-LEFT OUTER JOIN prereq p ON c.course_id = p.course_id;
+FROM COURSE c
+LEFT OUTER JOIN PREREQ p ON c.course_id = p.course_id;
 
---12
-SELECT c.course_id, c.title, p.prereq_id, p.prereq_title  
-FROM course c
-RIGHT OUTER JOIN prereq p ON c.course_id = p.course_id;
-
---13
 SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
-FROM course c
-LEFT JOIN prereq p ON c.course_id = p.course_id
+FROM COURSE c
+RIGHT OUTER JOIN PREREQ p ON c.course_id = p.course_id;
+
+SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
+FROM COURSE c
+LEFT JOIN PREREQ p ON c.course_id = p.course_id
 UNION
 SELECT c.course_id, c.title, p.prereq_id, p.prereq_title
-FROM course c  
-RIGHT JOIN prereq p ON c.course_id = p.course_id
+FROM COURSE c
+RIGHT JOIN PREREQ p ON c.course_id = p.course_id
 WHERE c.course_id IS NULL;
