@@ -1,4 +1,4 @@
-use 20220279db ;
+use 20220276db ;
 
 CREATE TABLE contacts1 (
    contact_id INT(11) NOT NULL AUTO_INCREMENT,
